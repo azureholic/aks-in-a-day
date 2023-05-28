@@ -1,0 +1,13 @@
+az aks nodepool add --resource-group $env:ResourceGroupName `
+    --cluster-name $env:clusterName `
+    --nodepool-name npwin `
+    --enable-cluster-autoscaler `
+    --node-count 1 `
+    --min-count 0 `
+    --max-count 10 `
+    --mode User `
+    --node-osdisk-type Ephemeral `
+    --os-type Windows `
+    --os-sku Windows2022 `
+    --node-vm-size Standard_D8s_v3 `
+    --zones 1 2 3 
