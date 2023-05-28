@@ -16,4 +16,4 @@ az ad group member add --group $env:AKSAdminGroup --member-id $currentUserId
 
 #install CLI Tools
 az aks install-cli
-winget instqall Helm.Helm
+winget install Helm.Helm
