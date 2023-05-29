@@ -7,8 +7,13 @@ Set-Location $currentFolder
 
 #### BUILD THE .NET Framework App ####
 Set-Location ..\src\DotnetFrameworkApp
-copy Dockerfile ./publish
-az acr build -r aksinaday -t aksinaday.azurecr.io/webapp01:latest --platform windows ./publish
+#./msbuild.bat
+#az acr build -r aksinaday -t aksinaday.azurecr.io/webapp01:latest --platform windows ./publish
+Set-Location $currentFolder
+
+#### BUILD THE wINDOWS AZURE DEVOPS AGENT ####
+Set-Location ..\src\AzDoAgent
+az acr build -r aksinaday -t aksinaday.azurecr.io/azdowin:latest --platform windows .
 Set-Location $currentFolder
 
 
