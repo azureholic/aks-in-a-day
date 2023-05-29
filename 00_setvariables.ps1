@@ -1,6 +1,6 @@
 $env:resourceGroupName = "rg-aks-01"
 $env:clusterName = "aks-01"
-$env:location = "westeurope"
+$env:location = "uksouth"
 
 
 #Create the resource group if not exists

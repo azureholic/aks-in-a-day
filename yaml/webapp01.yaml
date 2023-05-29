@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp01-deployment
+  namespace: workload
+  labels:
+    app: webapp01
+spec:
+  replicas: 3 
+  selector:
+    matchLabels:
+      app: webapp01
+  template:
+    metadata:
+      labels:
+        app: webapp01
+    spec:
+      containers:
+      - name: webapp01
+        image: aksinaday.azurecr.io/webapp01:latest
