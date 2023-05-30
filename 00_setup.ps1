@@ -49,5 +49,11 @@ Set-Location $currentFolder
 
 #### BUILD THE wINDOWS AZURE DEVOPS AGENT ####
 Set-Location .\src\AzDoAgent
-az acr build -r $env:registryName -t azdowin:latest --platform windows .
+az acr build -r $env:registryName `
+    --build-arg AZP_URL=https://dev.azure.com/azureholic `
+    --build-arg AZP_TOKEN=$env:PAT `
+    --build-arg AZP_POOL=k8s `
+    -t azdowin:latest `
+    --platform windows .
+    
 Set-Location $currentFolder
