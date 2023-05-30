@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: workload
+  labels:
+    name: workload
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp02-deployment
+  namespace: workload
+  labels:
+    app: webapp02
+spec:
+  replicas: 3 
+  selector:
+    matchLabels:
+      app: webapp02
+  template:
+    metadata:
+      labels:
+        app: webapp02
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+      containers:
+      - name: webapp02
+        image: acraksinaday.azurecr.io/webapp02:latest
+        resources:
+          requests:
+            cpu: 500m
+            memory: 256Mi
+          limits:
+            cpu: 750m
+            memory: 512Mi
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: "ASPNETCORE_ENVIRONMENT"
+          value: "Kubernetes"
+        - name: "ASPNETCORE_URLS"
+          value: "http://+:8080"
+---
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: webapp02
+  name: webapp02-service
+  namespace: workload
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: webapp02
+  type: LoadBalancer

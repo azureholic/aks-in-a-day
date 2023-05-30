@@ -15,29 +15,32 @@ spec:
       labels:
         app: azdevops-agent
     spec:
+      nodeSelector:
+        kubernetes.io/os: windows
       containers:
       - name: azdo
-        image: aksinaday.azurecr.io/azdo-agent:latest
+        image: acraksinaday.azurecr.io/azdowin:latest
+        resources:
+          requests:
+            cpu: 500m
+            memory: 256Mi
+          limits:
+            cpu: 750m
+            memory: 512Mi
         env:
-          - name: AZP_URL
-            valueFrom:
-              secretKeyRef:
-                name: azdevops
-                key: AZP_URL
-          - name: AZP_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: azdevops
-                key: AZP_TOKEN
-          - name: AZP_POOL
-            valueFrom:
-              secretKeyRef:
-                name: azdevops
-                key: AZP_POOL
-        volumeMounts:
-        - mountPath: /var/run/docker.sock
-          name: docker-volume
-      volumes:
-      - name: docker-volume
-        hostPath:
-          path: /var/run/docker.sock
+        - name: AZP_URL
+          valueFrom:
+            secretKeyRef:
+              name: azdevops
+              key: AZP_URL
+        - name: AZP_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: azdevops
+              key: AZP_TOKEN
+        - name: AZP_POOL
+          valueFrom:
+            secretKeyRef:
+              name: azdevops
+              key: AZP_POOL
+      
