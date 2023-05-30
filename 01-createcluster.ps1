@@ -13,6 +13,8 @@ az aks create --resource-group $env:resourceGroupName `
               --min-count 1 `
               --max-count 3 `
               --network-plugin azure `
+              --assign-identity $env:miResourceId `
+              --attach-acr $env:registryName
               #--network-plugin-mode overlay
 
               

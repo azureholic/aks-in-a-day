@@ -1,3 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: workload
+  labels:
+    name: workload
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,4 +24,14 @@ spec:
     spec:
       containers:
       - name: webapp01
-        image: aksinaday.azurecr.io/webapp01:latest
+        image: acraksinaday.azurecr.io/webapp01:latest
+        resources:
+          requests:
+            cpu: 500m
+            memory: 256Mi
+          limits:
+            cpu: 750m
+            memory: 512Mi
+        ports:
+        - containerPort: 80
+          protocol: TCP
