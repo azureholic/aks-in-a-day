@@ -57,7 +57,7 @@ spec:
           hostPath:
             path: /var/run/docker.sock
   pollingInterval: 30
-  successfulJobsHistoryLimit: 5
+  successfulJobsHistoryLimit: 0
   failedJobsHistoryLimit: 5
   minReplicaCount: 0
   maxReplicaCount: 10   
