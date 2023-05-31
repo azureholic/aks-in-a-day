@@ -1,0 +1,180 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: pipeline-trigger-auth
+spec:
+  secretTargetRef:
+    - parameter: personalAccessToken
+      name: azdevops
+      key: AZP_TOKEN
+    - parameter: organizationURL
+      name: azdevops
+      key: AZP_URL
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledJob
+metadata:
+  name: azdevops-scaledjob-win-light
+  namespace: azdo
+spec:
+  jobTargetRef:
+    template:
+      spec:
+        nodeSelector:
+          kubernetes.io/os: windows
+        containers:
+        - name: azdevops-agent-job
+          image: acraksinaday.azurecr.io/azdowin:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 2000m
+              memory: 4000Mi
+            limits:
+              cpu: 2000m
+              memory: 4000Mi
+          env:
+          - name: AZP_URL
+            valueFrom:
+              secretKeyRef:
+                name: azdevops
+                key: AZP_URL
+          - name: AZP_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: azdevops
+                key: AZP_TOKEN
+          - name: AZP_POOL
+            value: aks-light
+          volumeMounts:
+          - mountPath: /var/run/docker.sock
+            name: docker-volume
+        volumes:
+        - name: docker-volume
+          hostPath:
+            path: /var/run/docker.sock
+  pollingInterval: 30
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 5
+  minReplicaCount: 0
+  maxReplicaCount: 10   
+  scalingStrategy:
+    strategy: "default"               
+  triggers:
+  - type: azure-pipelines
+    metadata:
+      poolID: "11"
+      organizationURLFromEnv: "AZP_URL"
+      personalAccessTokenFromEnv: "AZP_TOKEN"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledJob
+metadata:
+  name: azdevops-scaledjob-win-middle
+  namespace: azdo
+spec:
+  jobTargetRef:
+    template:
+      spec:
+        nodeSelector:
+          kubernetes.io/os: windows
+        containers:
+        - name: azdevops-agent-job
+          image: acraksinaday.azurecr.io/azdowin:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 3000m
+              memory: 6000Mi
+            limits:
+              cpu: 3000m
+              memory: 6000Mi
+          env:
+          - name: AZP_URL
+            valueFrom:
+              secretKeyRef:
+                name: azdevops
+                key: AZP_URL
+          - name: AZP_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: azdevops
+                key: AZP_TOKEN
+          - name: AZP_POOL
+            value: aks-middle
+          volumeMounts:
+          - mountPath: /var/run/docker.sock
+            name: docker-volume
+        volumes:
+        - name: docker-volume
+          hostPath:
+            path: /var/run/docker.sock
+  pollingInterval: 30
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 5
+  minReplicaCount: 0
+  maxReplicaCount: 10   
+  scalingStrategy:
+    strategy: "default"               
+  triggers:
+  - type: azure-pipelines
+    metadata:
+      poolID: "12"
+      organizationURLFromEnv: "AZP_URL"
+      personalAccessTokenFromEnv: "AZP_TOKEN"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledJob
+metadata:
+  name: azdevops-scaledjob-win-heavy
+  namespace: azdo
+spec:
+  jobTargetRef:
+    template:
+      spec:
+        nodeSelector:
+          kubernetes.io/os: windows
+        containers:
+        - name: azdevops-agent-job
+          image: acraksinaday.azurecr.io/azdowin:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 6000m
+              memory: 12000Mi
+            limits:
+              cpu: 6000m
+              memory: 12000Mi
+          env:
+          - name: AZP_URL
+            valueFrom:
+              secretKeyRef:
+                name: azdevops
+                key: AZP_URL
+          - name: AZP_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: azdevops
+                key: AZP_TOKEN
+          - name: AZP_POOL
+            value: aks-heavy
+          volumeMounts:
+          - mountPath: /var/run/docker.sock
+            name: docker-volume
+        volumes:
+        - name: docker-volume
+          hostPath:
+            path: /var/run/docker.sock
+  pollingInterval: 30
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 5
+  minReplicaCount: 0
+  maxReplicaCount: 10   
+  scalingStrategy:
+    strategy: "default"               
+  triggers:
+  - type: azure-pipelines
+    metadata:
+      poolID: "13"
+      organizationURLFromEnv: "AZP_URL"
+      personalAccessTokenFromEnv: "AZP_TOKEN"

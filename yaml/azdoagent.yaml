@@ -43,8 +43,10 @@ spec:
               secretKeyRef:
                 name: azdevops
                 key: AZP_POOL
-          lifecycle:
-            preStop:
-              exec:
-                command: ["sleep", "30"]
-        
+          volumeMounts:
+          - mountPath: /var/run/docker.sock
+            name: docker-volume
+      volumes:
+      - name: docker-volume
+        hostPath:
+          path: /var/run/docker.sock
